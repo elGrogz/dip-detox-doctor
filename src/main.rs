@@ -8,6 +8,7 @@ fn main() {
     .add_plugin(LogPlugin)
     .add_plugin(ActionPlugin)
     .add_system(handle_check)
+    .add_system(handle_install)
     .run();
 }
 
@@ -18,10 +19,14 @@ struct Cli {
     action: Action,
 }
 
+
 #[derive(SubcommandPlugin, clap::Subcommand, Clone, Debug)] // attribute macro
 pub enum Action {
     #[clap(about = "Checks your React Native and Detox installation")]
-    Check
+    Check,
+
+    #[clap(about = "Install an android emulator")]
+    Install
 }
 
 fn handle_check(mut actions: EventReader<CheckAction>) {
@@ -39,5 +44,12 @@ fn handle_check(mut actions: EventReader<CheckAction>) {
             }      
             Err(e) => {println!("Error: {e}")}
         }
+    });
+}
+
+fn handle_install(mut actions: EventReader<InstallAction>) {
+    println!("hello");
+    actions.iter().for_each(|_action| {
+        println!("Installing!");
     });
 }
